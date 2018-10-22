@@ -48,15 +48,15 @@ async def checking_voice(ctx):
             pos = in_voice.index(ctx.message.server.id)
             del in_voice[pos]
             server = ctx.message.server
-            voice_client = bot.voice_client_in(server)
+            voice_client = client.voice_client_in(server)
             await voice_client.disconnect()
-            await bot.say("{} left because there was no audio playing for a while".format(bot.user.name))
+            await client.say("{} left because there was no audio playing for a while".format(client.user.name))
         except:
             pass
 
 @client.event
 async def on_ready():
-    bot.loop.create_task(all_false())
+    client.loop.create_task(all_false())
     print(bot.user.name)    
     
 @client.command(pass_context=True)
