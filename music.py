@@ -8,6 +8,7 @@ TOKEN = "NTAzNjk1NzYxNzYzMDc0MDcx.Dq6bAw.056jAYmPcWQIlpJ1CvHlGxarT0Q"
 client = commands.Bot(command_prefix="-")
 players = {}
 
+
 @client.event
 async def on_ready():
     print("Bot online.")
