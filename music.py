@@ -37,7 +37,7 @@ playing = {}
 
 
 async def all_false():
-    for i in bot.servers:
+    for i in client.servers:
         playing[i.id]=False
 
 
