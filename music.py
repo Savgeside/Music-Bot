@@ -62,8 +62,11 @@ async def on_ready():
 @bot.command(pass_context=True)
 async def join(ctx):
     channel = ctx.message.author.voice.voice_channel
+    if channel is None:
+      bot.say(":x: | You need to join a voice channel first bud!")
     await bot.join_voice_channel(channel)
     in_voice.append(ctx.message.server.id)
+    await bot.say(":musical_note: I have joined and I am ready to play some music for you!")
 
 
 async def player_in(con):  # After function for music
