@@ -62,7 +62,11 @@ async def on_ready():
 @bot.command(pass_context=True)
 async def join(ctx):
     channel = ctx.message.author.voice.voice_channel
+    if channel is None:
+        await client.say(":exclamation: **Please join a voice channel first! Do: a.join**")
+        return
     await bot.join_voice_channel(channel)
+    await client.say("<:music:503713910763814912> | **I have joined your voice channel!**")
     in_voice.append(ctx.message.server.id)
 
 
@@ -122,20 +126,23 @@ async def play(ctx, *,url):
 
 @bot.command(pass_context=True)
 async def queue(con):
-    await bot.say("There are currently {} audios in queue".format(len(songs)))
+    await bot.say("**There are currently {} audios in queue**".format(len(songs)))
 
 @bot.command(pass_context=True)
 async def pause(ctx):
     players[ctx.message.server.id].pause()
+    await client.say("<:music:503713910763814912> | **I have paused the audio for you!**")
 
 @bot.command(pass_context=True)
 async def resume(ctx):
     players[ctx.message.server.id].resume()
+    await client.say("<:music:503713910763814912> | **Resumed Audio for you!**")
           
 @bot.command(pass_context=True)
 async def volume(ctx, vol:float):
     volu = float(vol)
     players[ctx.message.server.id].volume=volu
+    await client.say("<:music:503713910763814912> | **Changed the volume to: {vol}**")
 
 
 @bot.command(pass_context=True)
