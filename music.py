@@ -81,7 +81,7 @@ async def player_in(con):  # After function for music
         if len(songs[con.message.server.id]) != 0:  # If queue is not empty
             # if audio is not playing and there is a queue
             songs[con.message.server.id][0].start()  # start it
-            await bot.send_message(con.message.channel, 'Now queueed')
+            await bot.send_message(con.message.channel, '**No playing queued song!**')
             del songs[con.message.server.id][0]  # delete list afterwards
     except:
         pass
@@ -108,7 +108,7 @@ async def play(ctx, *,url):
         song = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
         songs[ctx.message.server.id]=[] #make a list 
         songs[ctx.message.server.id].append(song) #add song to queue
-        await bot.say("Audio {} is queued".format(song.title))
+        await bot.say("Audio ``{}`` is queued".format(song.title))
 
     if playing[ctx.message.server.id] == False:
         voice = bot.voice_client_in(ctx.message.server)
@@ -126,7 +126,7 @@ async def play(ctx, *,url):
 
 @bot.command(pass_context=True)
 async def queue(con):
-    await bot.say("**{}**".format(songs.title))
+    await bot.say("**{}**".format(songs))
 
 @bot.command(pass_context=True)
 async def pause(ctx):
