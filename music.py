@@ -1,6 +1,7 @@
 import discord
 import youtube_dl
 import asyncio
+from discord import opus
 from discord.ext import commands
 
 TOKEN = "NTAzNjk1NzYxNzYzMDc0MDcx.Dq6bAw.056jAYmPcWQIlpJ1CvHlGxarT0Q"
@@ -26,7 +27,7 @@ async def join(ctx):
 async def leave(ctx):
     channel = ctx.message.author.voice.voice_channel
     server = ctx.message.server
-    voice_client = client.voice_client_in(cserver)
+    voice_client = client.voice_client_in(server)
     if voice_client is None:
         await client.say(":exclamation: | **I am not in a voice channel!**")
         return
