@@ -519,4 +519,4 @@ async def bal(ctx, user: discord.Member = None):
     embed.set_footer(icon_url=user.avatar_url, text=f"Requested by: {author.name}")
     await client.say(embed=embed)
 
-bot.run(os.environ['TOKEN'])
+client.run(os.environ['TOKEN'])
