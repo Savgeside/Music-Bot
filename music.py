@@ -1,6 +1,6 @@
 import discord
-import os
 import youtube_dl
+import asyncio
 from discord.ext import commands
 
 TOKEN = "NTAzNjk1NzYxNzYzMDc0MDcx.Dq6bAw.056jAYmPcWQIlpJ1CvHlGxarT0Q"
