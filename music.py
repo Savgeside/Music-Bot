@@ -24,15 +24,25 @@ async def join(ctx):
 
 @client.command(pass_context=True)
 async def leave(ctx):
+    channel = ctx.message.author.voice.voice_channel
     server = ctx.message.server
-    voice_client = client.voice_client_in(server)
-    await voice_client.disconnect()
+    voice_client = client.voice_client_in(cserver)
+    if voice_client is None:
+        await client.say(":exclamation: | **I am not in a voice channel!**")
+        return
+    if channel is None:
+        await client.say(":exclamation: | **Please join a voice channel!**")
+        return
+    await voice_client.disconnect(channel)
     await client.say(f"**I have left** <:music:503713910763814912>")
 
 @client.command(pass_context=True)
 async def play(ctx, url):
     server = ctx.message.server
     voice_client = client.voice_client_in(server)
+    if voice_client is None:
+        await client.say(":exclamation: | **I am not in a voice channel!**")
+        return
     player = await voice_client.create_ytdl_player(url)
     players[server.id] = player
     player.start()
