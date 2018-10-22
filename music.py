@@ -119,7 +119,7 @@ async def play(ctx, *,url):
             await bot.say("Can not play live audio yet.")
         elif players[ctx.message.server.id].is_live == False:
             player.start()
-            await bot.say(f"**Now playing {url}")
+            await bot.say(f"**Now playing {song.title}**")
             playing[ctx.message.server.id] = True
 
 
