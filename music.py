@@ -57,7 +57,7 @@ async def checking_voice(ctx):
 @client.event
 async def on_ready():
     client.loop.create_task(all_false())
-    print(bot.user.name)    
+    print(client.user.name)    
     
 @client.command(pass_context=True)
 async def join(ctx):
