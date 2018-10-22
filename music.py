@@ -28,9 +28,6 @@ async def leave(ctx):
     channel = ctx.message.author.voice.voice_channel
     server = ctx.message.server
     voice_client = client.voice_client_in(server)
-    if voice_client is None:
-        await client.say(":exclamation: | **I am not in a voice channel!**")
-        return
     if channel is None:
         await client.say(":exclamation: | **Please join a voice channel!**")
         return
@@ -41,9 +38,6 @@ async def leave(ctx):
 async def play(ctx, url):
     server = ctx.message.server
     voice_client = client.voice_client_in(server)
-    if voice_client is None:
-        await client.say(":exclamation: | **I am not in a voice channel!**")
-        return
     player = await voice_client.create_ytdl_player(url)
     players[server.id] = player
     player.start()
