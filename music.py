@@ -109,7 +109,7 @@ async def play(ctx, *,url):
         songs[ctx.message.server.id]=[] #make a list 
         songs[ctx.message.server.id].append(song) #add song to queue
         await client.say(":musical_note: Audio ``{}`` is queued".format(song.title))
-
+        return
     if playing[ctx.message.server.id] == False:
         voice = client.voice_client_in(ctx.message.server)
         player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: client.loop.create_task(player_in(ctx)))
@@ -121,7 +121,6 @@ async def play(ctx, *,url):
             player.start()
             await client.say(f"Searching :mag_right: ``{url}``")
             await client.say(f":musical_note: Now playing ``{player.title}``")
-            await client.say(f":musical_note: Time is ``{player.time}``")
             playing[ctx.message.server.id] = True
 
 
