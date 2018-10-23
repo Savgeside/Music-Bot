@@ -73,10 +73,10 @@ async def leave(ctx):
   await client.say(f":music_note: **I have left {voice_client}**")
   
 @client.command(pass_context=True)
-async def play(ctx, *, url):
+async def play(ctx, *, url: str):
   server = ctx.message.server
   voice_client = client.voice_client_in(server)
-  player = await voice_client.create_ytdl_player(url, ytdl_options=opts)
+  player = await voice_client.create_ytdl_player(url)
   players[server.id] = player
   player.start()
   await client.say(f"**Searching** :mag_right: - ``{url}``")
