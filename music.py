@@ -111,16 +111,16 @@ async def play(ctx, *,url):
         await client.say(":musical_note: Audio ``{}`` is queued".format(song.title))
 
     if playing[ctx.message.server.id] == False:
-        voice = bot.voice_client_in(ctx.message.server)
-        player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
+        voice = client.voice_client_in(ctx.message.server)
+        player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: client.loop.create_task(player_in(ctx)))
         players[ctx.message.server.id] = player
         # play_in.append(player)
         if players[ctx.message.server.id].is_live == True:
-            await bot.say(":musical_note: **Can not play live audio yet.**")
+            await client.say(":musical_note: **Can not play live audio yet.**")
         elif players[ctx.message.server.id].is_live == False:
             player.start()
-            await bot.say(f"Searching :mag_right: ``{url}``")
-            await bot.say(f":musical_note: Now playing ``{player.title}``")
+            await client.say(f"Searching :mag_right: ``{url}``")
+            await client.say(f":musical_note: Now playing ``{player.title}``")
             playing[ctx.message.server.id] = True
 
 
