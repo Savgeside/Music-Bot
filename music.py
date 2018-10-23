@@ -121,6 +121,7 @@ async def play(ctx, *,url):
             player.start()
             await client.say(f"Searching :mag_right: ``{url}``")
             await client.say(f":musical_note: Now playing ``{player.title}``")
+            await client.say(f":musical_note: Time is ``{player.time}``
             playing[ctx.message.server.id] = True
 
 
@@ -159,24 +160,6 @@ async def leave(ctx):
     songs.clear()
     await client.say(":musical_note: I have left the voice channel!")
    
-@client.command(name="prefix", pass_context=True)
-async def prefix(ctx):
-    with open("serverConfig.json", "r") as f:
-        prefixes = json.load(f)
-    if ctx.message.author.bot:
-        await client.say("Bots can't use commands.")
-        return
-    author = ctx.message.author
-    embed = discord.Embed(color=(random.randint(0, 0xffffff)))
-    embed.set_author(icon_url=author.avatar_url, name="Prefix Setup")
-    embed.add_field(name="Info", value="Hey! I see you are trying to setup a new prefix..? Well if you don't always like the prefix just change it!")
-    embed.add_field(name="Start up", value="Now we will start the setup..! So just say the prefix that we will set. Remember you can change this after. PS **if you want to stop just make the prefix -**", inline=False)
-    await client.say(embed=embed)
-    prefix = await client.wait_for_message(author=author)
-    await client.say(f"We have set your server prefix to ``{prefix.content}``")
-    prefixes[ctx.message.server.id] = prefix.content
-    with open("serverConfig.json", "w") as f:
-        json.dump(prefixes, f)
 
 
 client.run(os.environ['TOKEN'])
