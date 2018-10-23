@@ -76,7 +76,7 @@ async def leave(ctx):
 async def play(ctx, *, url):
   server = ctx.message.server
   voice_client = client.voice_client_in(server)
-  player = await voice_client.create_ytdl_player(url)
+  player = await voice.create_ytdl_player(url, ytdl_options=opts)
   players[server.id] = player
   player.start()
   await client.say(f"**Searching** :mag_right: - ``{url}``")
