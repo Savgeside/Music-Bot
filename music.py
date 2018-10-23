@@ -159,4 +159,4 @@ async def leave(ctx):
     songs.clear()
 
 
-client.run(os.environ['TOKEN'])
+    bot.run(os.environ['TOKEN'])
