@@ -127,8 +127,7 @@ async def play(ctx, *,url):
 
 @client.command(pass_context=True)
 async def queue(con):
-    players[ctx.message.server.id] = player
-    await client.say("There are currently ``{}`` audios in queue".format(player.title))
+    await client.say(f"Currently Playing ``{songs.title}`` \n``{playing.title}``")
 
 @client.command(pass_context=True)
 async def pause(ctx):
