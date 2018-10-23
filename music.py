@@ -6,7 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import Bot
 
 
-client=commands.Bot(command_prefix='a.')
+bot=commands.Bot(command_prefix='a.')
 
 from discord import opus
 OPUS_LIBS = ['libopus-0.x86.dll', 'libopus-0.x64.dll',
@@ -37,7 +37,7 @@ playing = {}
 
 
 async def all_false():
-    for i in client.servers:
+    for i in bot.servers:
         playing[i.id]=False
 
 
@@ -48,31 +48,42 @@ async def checking_voice(ctx):
             pos = in_voice.index(ctx.message.server.id)
             del in_voice[pos]
             server = ctx.message.server
-            voice_client = client.voice_client_in(server)
+            voice_client = bot.voice_client_in(server)
             await voice_client.disconnect()
-            await client.say("{} left because there was no audio playing for a while".format(client.user.name))
+            await bot.say("{} left because there was no audio playing for a while".format(bot.user.name))
         except:
             pass
 
-@client.event
+@bot.event
 async def on_ready():
-    client.loop.create_task(all_false())
-    print(client.user.name)    
+    bot.loop.create_task(all_false())
+    print(bot.user.name)    
     
-@client.command(pass_context=True)
+@bot.command(pass_context=True)
 async def join(ctx):
-  channel = ctx.message.author.voice.voice_channel
-  await client.join_voice_channel(channel)
-  await client.say(f":music_note: **I have joined {channel}** :thumbsup:")
-  
-@client.command(pass_context=True)
-async def leave(ctx):
-  server = ctx.message.server
-  voice_client = client.voice_client_in(server)
-  await voice_client.disconnect()
-  await client.say(f":music_note: **I have left {voice_client}**")
-  
-@client.command(pass_context=True)
+    channel = ctx.message.author.voice.voice_channel
+    await bot.join_voice_channel(channel)
+    in_voice.append(ctx.message.server.id)
+
+
+async def player_in(con):  # After function for music
+    try:
+        if len(songs[con.message.server.id]) == 0:  # If there is no queue make it False
+            playing[con.message.server.id] = False
+            bot.loop.create_task(checking_voice(con))
+    except:
+        pass
+    try:
+        if len(songs[con.message.server.id]) != 0:  # If queue is not empty
+            # if audio is not playing and there is a queue
+            songs[con.message.server.id][0].start()  # start it
+            await bot.send_message(con.message.channel, 'Now queueed')
+            del songs[con.message.server.id][0]  # delete list afterwards
+    except:
+        pass
+
+
+@bot.command(pass_context=True)
 async def play(ctx, *,url):
 
     opts = {
@@ -83,32 +94,69 @@ async def play(ctx, *,url):
 
     if ctx.message.server.id not in in_voice: #auto join voice if not joined
         channel = ctx.message.author.voice.voice_channel
-        await client.join_voice_channel(channel)
+        await bot.join_voice_channel(channel)
         in_voice.append(ctx.message.server.id)
 
     
 
     if playing[ctx.message.server.id] == True: #IF THERE IS CURRENT AUDIO PLAYING QUEUE IT
-        voice = client.voice_client_in(ctx.message.server)
+        voice = bot.voice_client_in(ctx.message.server)
         song = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
         songs[ctx.message.server.id]=[] #make a list 
         songs[ctx.message.server.id].append(song) #add song to queue
-        await client.say("Audio {} is queued".format(song.title))
+        await bot.say("Audio {} is queued".format(song.title))
 
     if playing[ctx.message.server.id] == False:
-        voice = client.voice_client_in(ctx.message.server)
-        player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: client.loop.create_task(player_in(ctx)))
+        voice = bot.voice_client_in(ctx.message.server)
+        player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
         players[ctx.message.server.id] = player
         # play_in.append(player)
         if players[ctx.message.server.id].is_live == True:
-            await client.say("Can not play live audio yet.")
+            await bot.say("Can not play live audio yet.")
         elif players[ctx.message.server.id].is_live == False:
             player.start()
-            await client.say(f"**Searching** :mag_right: - ``{url}``")
-            await client.say(":musical_note: **Now playing** - ``{player.title}**")
+            await bot.say("Now playing audio")
             playing[ctx.message.server.id] = True
 
-   
+
+
+@bot.command(pass_context=True)
+async def queue(con):
+    await bot.say("There are currently {} audios in queue".format(len(songs)))
+
+@bot.command(pass_context=True)
+async def pause(ctx):
+    players[ctx.message.server.id].pause()
+
+@bot.command(pass_context=True)
+async def resume(ctx):
+    players[ctx.message.server.id].resume()
+          
+@bot.command(pass_context=True)
+async def volume(ctx, vol:float):
+    volu = float(vol)
+    players[ctx.message.server.id].volume=volu
+
+
+@bot.command(pass_context=True)
+async def skip(con): #skipping songs?
+  songs[con.message.server.id]
+    
+    
+    
+@bot.command(pass_context=True)
+async def stop(con):
+    players[con.message.server.id].stop()
+    songs.clear()
+
+@bot.command(pass_context=True)
+async def leave(ctx):
+    pos=in_voice.index(ctx.message.server.id)
+    del in_voice[pos]
+    server=ctx.message.server
+    voice_client=bot.voice_client_in(server)
+    await voice_client.disconnect()
+    songs.clear()
 
 
 client.run(os.environ['TOKEN'])
