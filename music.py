@@ -127,7 +127,7 @@ async def play(ctx, *,url):
 
 @client.command(pass_context=True)
 async def queue(con):
-    await client.say(f"Currently Playing ``{songs.title}`` \n``{playing.title}``")
+    await client.say(f"There is ")
 
 @client.command(pass_context=True)
 async def pause(ctx):
@@ -142,7 +142,7 @@ async def resume(ctx):
 
 
 @client.command(pass_context=True)
-async def stop(con):
+async def stop(ctx, con):
   if ctx.message.author.server_permissions.manage_channels:
     players[con.message.server.id].stop()
     songs.clear()
