@@ -83,7 +83,7 @@ async def play(ctx, *,url):
 
     if ctx.message.server.id not in in_voice: #auto join voice if not joined
         channel = ctx.message.author.voice.voice_channel
-        await bot.join_voice_channel(channel)
+        await client.join_voice_channel(channel)
         in_voice.append(ctx.message.server.id)
 
     
