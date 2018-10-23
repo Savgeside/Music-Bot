@@ -73,14 +73,39 @@ async def leave(ctx):
   await client.say(f":music_note: **I have left {voice_client}**")
   
 @client.command(pass_context=True)
-async def play(ctx, *, url: str):
-  server = ctx.message.server
-  voice_client = client.voice_client_in(server)
-  player = await voice_client.create_ytdl_player(url)
-  players[server.id] = player
-  player.start()
-  await client.say(f"**Searching** :mag_right: - ``{url}``")
-  await client.say(f":music_note: **Now playing** - ``{player.title}``")
+async def play(ctx, *,url):
+
+    opts = {
+        'default_search': 'auto',
+        'quiet': True,
+    }  # youtube_dl options
+
+
+    if ctx.message.server.id not in in_voice: #auto join voice if not joined
+        channel = ctx.message.author.voice.voice_channel
+        await bot.join_voice_channel(channel)
+        in_voice.append(ctx.message.server.id)
+
+    
+
+    if playing[ctx.message.server.id] == True: #IF THERE IS CURRENT AUDIO PLAYING QUEUE IT
+        voice = client.voice_client_in(ctx.message.server)
+        song = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
+        songs[ctx.message.server.id]=[] #make a list 
+        songs[ctx.message.server.id].append(song) #add song to queue
+        await client.say("Audio {} is queued".format(song.title))
+
+    if playing[ctx.message.server.id] == False:
+        voice = client.voice_client_in(ctx.message.server)
+        player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
+        players[ctx.message.server.id] = player
+        # play_in.append(player)
+        if players[ctx.message.server.id].is_live == True:
+            await client.say("Can not play live audio yet.")
+        elif players[ctx.message.server.id].is_live == False:
+            player.start()
+            await client.say("Now playing audio")
+            playing[ctx.message.server.id] = True
 
    
 
