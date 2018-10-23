@@ -104,7 +104,8 @@ async def play(ctx, *,url):
             await client.say("Can not play live audio yet.")
         elif players[ctx.message.server.id].is_live == False:
             player.start()
-            await client.say("Now playing audio")
+            await client.say(f"**Searching** :mag_right: - ``{url}``")
+            await client.say(":musical_note: **Now playing** - ``{player.title}**")
             playing[ctx.message.server.id] = True
 
    
