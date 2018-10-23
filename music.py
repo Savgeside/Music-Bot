@@ -97,7 +97,7 @@ async def play(ctx, *,url):
 
     if playing[ctx.message.server.id] == False:
         voice = client.voice_client_in(ctx.message.server)
-        player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
+        player = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: client.loop.create_task(player_in(ctx)))
         players[ctx.message.server.id] = player
         # play_in.append(player)
         if players[ctx.message.server.id].is_live == True:
