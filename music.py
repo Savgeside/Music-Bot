@@ -121,6 +121,7 @@ async def play(ctx, *,url):
             player.start()
             await client.say(f"Searching :mag_right: ``{url}``")
             await client.say(f":musical_note: Now playing ``{player.title}``")
+            await client.say(f":clock: Testing Time: ``{player.time"``")
             playing[ctx.message.server.id] = True
 
 
