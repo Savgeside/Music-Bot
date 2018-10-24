@@ -17,7 +17,7 @@ def load_opus_lib(opus_libs=OPUS_LIBS):
     if opus.is_loaded():
         return True
 
-    for opus_lib in opus_libs:
+    for opus_lib in opus_libs:To
             try:
                 opus.load_opus(opus_lib)
                 return
@@ -105,7 +105,7 @@ async def play(ctx, *,url):
         song = await voice.create_ytdl_player(url, ytdl_options=opts, after=lambda: bot.loop.create_task(player_in(ctx)))
         songs[ctx.message.server.id]=[] #make a list 
         songs[ctx.message.server.id].append(song) #add song to queue
-        await bot.say("Audio {} is queued".format(song.title))
+        await bot.say("**Audio is queued** - ``{}``".format(song.title))
 
     if playing[ctx.message.server.id] == False:
         voice = bot.voice_client_in(ctx.message.server)
@@ -124,7 +124,7 @@ async def play(ctx, *,url):
 
 @bot.command(pass_context=True)
 async def queue(con):
-    await bot.say(f"**Now Playing: \n **``{playing.title}``** \n Queued: \n ``**{songs.title}**``")
+    await bot.say(f"**Currently playing** - ``{playing.player.title}``")
 
 @bot.command(pass_context=True)
 async def pause(ctx):
