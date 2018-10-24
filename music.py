@@ -118,14 +118,13 @@ async def play(ctx, *,url):
             player.start()
             await bot.say(f":mag_right: **Searching** - ``{url}``")
             await bot.say(f":headphones: **Now playing** - ``{player.title}``")
-            await bot.say(f"**Time** - ``{player.duration}``")
             playing[ctx.message.server.id] = True
 
 
 
 @bot.command(pass_context=True)
 async def queue(con):
-    await bot.say("There are currently {} audios in queue".format(len(songs)))
+    await bot.say(f"**Now Playing: \n **``{playing.title}``** \n Queued: \n ``**{songs.title}**``")
 
 @bot.command(pass_context=True)
 async def pause(ctx):
