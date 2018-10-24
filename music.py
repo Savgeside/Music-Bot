@@ -50,7 +50,7 @@ async def checking_voice(ctx):
             server = ctx.message.server
             voice_client = bot.voice_client_in(server)
             await voice_client.disconnect()
-            await bot.say("{} left because there was no audio playing for a while".format(bot.user.name))
+            await bot.say("**{} left because there was no audio playing for a while**".format(bot.user.name))
         except:
             pass
 
@@ -64,6 +64,7 @@ async def join(ctx):
     channel = ctx.message.author.voice.voice_channel
     await bot.join_voice_channel(channel)
     in_voice.append(ctx.message.server.id)
+    await bot.say(f":wave: **Hey, I have joined your voice_channel** - ``{channel}``")
 
 
 async def player_in(con):  # After function for music
@@ -77,7 +78,7 @@ async def player_in(con):  # After function for music
         if len(songs[con.message.server.id]) != 0:  # If queue is not empty
             # if audio is not playing and there is a queue
             songs[con.message.server.id][0].start()  # start it
-            await bot.send_message(con.message.channel, 'Now queueed')
+            await bot.send_message(con.message.channel, f"**:notes:  **Now playing** - ``{playing.title}``")
             del songs[con.message.server.id][0]  # delete list afterwards
     except:
         pass
@@ -115,7 +116,9 @@ async def play(ctx, *,url):
             await bot.say("Can not play live audio yet.")
         elif players[ctx.message.server.id].is_live == False:
             player.start()
-            await bot.say("Now playing audio")
+            await bot.say(f":mag_right: **Searching** - ``{url}``")
+            await bot.say(f":headphones: **Now playing** - ``{player.title}``")
+            await bot.say(f"**Time** - ``{player.duration}``")
             playing[ctx.message.server.id] = True
 
 
