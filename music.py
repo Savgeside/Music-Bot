@@ -64,6 +64,7 @@ async def join(ctx):
     channel = ctx.message.author.voice.voice_channel
     await bot.join_voice_channel(channel)
     in_voice.append(ctx.message.server.id)
+    await bot.say(f"**:wave: **Joined the voice channel**")
 
 
 async def player_in(con):  # After function for music
@@ -115,39 +116,38 @@ async def play(ctx, *,url):
             await bot.say("Can not play live audio yet.")
         elif players[ctx.message.server.id].is_live == False:
             player.start()
-            await bot.say("Now playing audio")
+            await bot.say(f":mag_right: Searching - ``{url}``")
+            await bot.say(f":musical_note: Now Playing - ``{player.title}``")
             playing[ctx.message.server.id] = True
 
 
 
 @bot.command(pass_context=True)
 async def queue(con):
-    await bot.say("There are currently {} audios in queue".format(len(songs)))
+    await bot.say("There are currently ``{}`` audios in queue".format(len(songs)))
 
 @bot.command(pass_context=True)
 async def pause(ctx):
     players[ctx.message.server.id].pause()
+    await bot.say(f":octagonal_sign: **Paused** - ``{playing.title}``")
 
 @bot.command(pass_context=True)
 async def resume(ctx):
     players[ctx.message.server.id].resume()
+    await bot.say(f":headphones: **Resumed** - ``{playing.title}``")
           
 @bot.command(pass_context=True)
 async def volume(ctx, vol:float):
     volu = float(vol)
     players[ctx.message.server.id].volume=volu
+    await bot.say(f":headphones: **Set volume to** - ``{vol}``")
 
 
-@bot.command(pass_context=True)
-async def skip(con): #skipping songs?
-  songs[con.message.server.id]
-    
-    
-    
 @bot.command(pass_context=True)
 async def stop(con):
     players[con.message.server.id].stop()
     songs.clear()
+    await bot.say(f":octagonal_sign: **Stopped** - ``{playing.title}``")
 
 @bot.command(pass_context=True)
 async def leave(ctx):
@@ -157,6 +157,7 @@ async def leave(ctx):
     voice_client=bot.voice_client_in(server)
     await voice_client.disconnect()
     songs.clear()
+    await bot.say(f"**:wave: **Left the voice channel**")
 
 
     bot.run(os.environ['TOKEN'])
