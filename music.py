@@ -159,6 +159,7 @@ async def leave(ctx):
     voice_client=bot.voice_client_in(server)
     await voice_client.disconnect()
     songs.clear()
+    await bot.say(f":wave: **HCya, I have left your voice_channel**")
     
 
 bot.run(os.environ['TOKEN'])
